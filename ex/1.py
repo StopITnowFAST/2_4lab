@@ -11,8 +11,7 @@ short_options = "ho:v"
 long_options = ["help", "output=", "verbose"]
 
 try:
-    arguments, values = getopt.getopt(argument_list, short_options,
-                                      long_options)
+    arguments, values = getopt.getopt(argument_list, short_options, long_options)
 except getopt.error as err:
     # Output error, and return with an error code
     print(str(err))

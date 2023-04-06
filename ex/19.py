@@ -12,13 +12,7 @@ def add_worker(staff, name, post, year):
     """
     Добавить данные о работнике.
     """
-    staff.append(
-        {
-            "name": name,
-            "post": post,
-            "year": year
-        }
-    )
+    staff.append({"name": name, "post": post, "year": year})
 
     return staff
 
@@ -30,19 +24,11 @@ def display_workers(staff):
     # Проверить, что список работников не пуст.
     if staff:
         # Заголовок таблицы.
-        line = '+-{}-+-{}-+-{}-+-{}-+'.format(
-            '-' * 4,
-            '-' * 30,
-            '-' * 20,
-            '-' * 8
-        )
+        line = "+-{}-+-{}-+-{}-+-{}-+".format("-" * 4, "-" * 30, "-" * 20, "-" * 8)
         print(line)
         print(
-            '| {:^4} | {:^30} | {:^20} | {:^8} |'.format(
-                "№",
-                "Ф.И.О.",
-                "Должность",
-                "Год"
+            "| {:^4} | {:^30} | {:^20} | {:^8} |".format(
+                "№", "Ф.И.О.", "Должность", "Год"
             )
         )
         print(line)
@@ -50,11 +36,11 @@ def display_workers(staff):
         # Вывести данные о всех сотрудниках.
         for idx, worker in enumerate(staff, 1):
             print(
-                '| {:>4} | {:<30} | {:<20} | {:>8} |'.format(
+                "| {:>4} | {:<30} | {:<20} | {:>8} |".format(
                     idx,
-                    worker.get('name', ''),
-                    worker.get('post', ''),
-                    worker.get('year', 0)
+                    worker.get("name", ""),
+                    worker.get("post", ""),
+                    worker.get("year", 0),
                 )
             )
             print(line)
@@ -72,11 +58,11 @@ def select_workers(staff, period):
     # Сформировать список работников.
     result = []
     for employee in staff:
-        if today.year - employee.get('year', today.year) >= period:
+        if today.year - employee.get("year", today.year) >= period:
             result.append(employee)
 
     # Возвратить список выбранных работников.
-        return result
+    return result
 
 
 def save_workers(file_name, staff):
@@ -85,8 +71,6 @@ def save_workers(file_name, staff):
     """
     # Открыть файл с заданным именем для записи.
     with open(file_name, "w", encoding="utf-8") as fout:
-        # Выполнить сериализацию данных в формат JSON.
-        # Для поддержки кирилицы установим ensure_ascii=False
         json.dump(staff, fout, ensure_ascii=False, indent=4)
 
 
@@ -100,62 +84,35 @@ def load_workers(file_name):
 
 
 def main(command_line=None):
-    # Создать родительский парсер для определения имени файла.
     file_parser = argparse.ArgumentParser(add_help=False)
-    file_parser.add_argument(
-        "filename",
-        action="store",
-        help="The data file name"
-    )
+    file_parser.add_argument("filename", action="store", help="The data file name")
 
-    # Создать основной парсер командной строки.
     parser = argparse.ArgumentParser("workers")
-    parser.add_argument(
-        "--version",
-        action="version",
-        version="%(prog)s 0.1.0"
-    )
+    parser.add_argument("--version", action="version", version="%(prog)s 0.1.0")
 
     subparsers = parser.add_subparsers(dest="command")
 
-    # Создать субпарсер для добавления работника.
-    add = subparsers.add_parser(
-        "add",
-        parents=[file_parser],
-        help="Add a new worker"
-    )
+    add = subparsers.add_parser("add", parents=[file_parser], help="Add a new worker")
+
     add.add_argument(
-        "-n",
-        "--name",
-        action="store",
-        required=True,
-        help="The worker's name"
+        "-n", "--name", action="store", required=True, help="The worker's name"
     )
-    add.add_argument(
-        "-p",
-        "--post",
-        action="store",
-        help="The worker's post"
-    )
+    add.add_argument("-p", "--post", action="store", help="The worker's post")
     add.add_argument(
         "-y",
         "--year",
         action="store",
         type=int,
         required=True,
-        help="The year of hiring"
+        help="The year of hiring",
     )
     # Создать субпарсер для отображения всех работников.
     _ = subparsers.add_parser(
-        "display",
-        parents=[file_parser],
-        help="Display all workers"
+        "display", parents=[file_parser], help="Display all workers"
     )
     # Создать субпарсер для выбора работников.
     select = subparsers.add_parser(
-        "select",
-        parents=[file_parser],
-        help="Select the workers"
+        "select", parents=[file_parser], help="Select the workers"
     )
     select.add_argument(
         "-P",
@@ -163,7 +120,7 @@ def main(command_line=None):
         action="store",
         type=int,
         required=True,
-        help="The required period"
+        help="The required period",
     )
     # Выполнить разбор аргументов командной строки.
     args = parser.parse_args(command_line)
@@ -177,13 +134,8 @@ def main(command_line=None):
 
     # Добавить работника.
     if args.command == "add":
-        workers = add_worker(
-            workers,
-            args.name,
-            args.post,
-            args.year
-        )
-    is_dirty = True
+        workers = add_worker(workers, args.name, args.post, args.year)
+        is_dirty = True
 
     # Отобразить всех работников.
     elif args.command == "display":
@@ -197,5 +149,7 @@ def main(command_line=None):
     # Сохранить данные в файл, если список работников был изменен.
     if is_dirty:
         save_workers(args.filename, workers)
-    if __name__ == "__main__":
-        main()
+
+
+if __name__ == "__main__":
+    main()
