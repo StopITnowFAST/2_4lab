@@ -52,7 +52,7 @@ def marks(staff):
     count = 0
     line = "+-{}-+-{}-+".format("-" * 30, "-" * 10)
     for student in staff:
-        if "2" in student.get("marks"):
+        if 2 in student.get("marks"):
             count += 1
             if count == 1:
                 print(line)
@@ -138,7 +138,7 @@ def main(command_line=None):
     elif args.command == "show":
         show(students)
 
-    elif args.command == "showmarks":
+    elif args.command == "show_marks":
         marks(students)
 
     if is_dirty:
